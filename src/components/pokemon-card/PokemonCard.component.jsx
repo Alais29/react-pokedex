@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import {getImgSrc, getIndividualPokemon} from '../../constants'
 
 const PokemonCard = ({ pokemonId, pokemonName, pokemonUrl }) => {
-  const [imgSrc, setImgSrc] = useState(
-    `https://pokeres.bastionbot.org/images/pokemon/${pokemonId}.png`
-  );
+  const [imgSrc, setImgSrc] = useState( () => getImgSrc(pokemonId));
+
+  const alternateImg = getIndividualPokemon(pokemonId);
 
   const LoadAlternateImg = () => {
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}/`)
+    fetch(alternateImg)
       .then((response) => response.json())
       .then((response) => {
         setImgSrc(response.sprites.front_default);
@@ -14,23 +15,26 @@ const PokemonCard = ({ pokemonId, pokemonName, pokemonUrl }) => {
   };
 
   return (
-    <div className="card mb-4">
-      <img
-        className="card-img-top p-5"
-        src={imgSrc}
-        onError={LoadAlternateImg}
-        alt="Pokemon Img"
-        height="350px"
-      ></img>
-      <div className="card-body">
-        <h5 className="card-title text-center">
-          # {pokemonId}{" "}
-          <span className="font-weight-normal">{pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)}</span>
-        </h5>
-        <div className="text-center">
-          <a className="btn btn-danger" href={pokemonUrl}>
-            Ver Más
-          </a>
+    <div className="col-md-4">
+      <div className="card mb-4">
+        <div className="p-5">
+          <img
+            className="card-img-top"
+            src={imgSrc}
+            onError={LoadAlternateImg}
+            alt={pokemonName}
+          ></img>
+        </div>
+        <div className="card-body">
+          <h5 className="card-title text-center">
+            # {pokemonId}{" "}
+            <span className="font-weight-normal">{pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)}</span>
+          </h5>
+          <div className="text-center">
+            <a className="btn btn-danger" href={pokemonUrl}>
+              Ver Más
+            </a>
+          </div>
         </div>
       </div>
     </div>
