@@ -31,9 +31,9 @@ const PokemonCard = ({ pokemonId, pokemonName, pokemonUrl }) => {
             <span className="font-weight-normal">{pokemonName.charAt(0).toUpperCase() + pokemonName.slice(1)}</span>
           </h5>
           <div className="text-center">
-            <a className="btn btn-danger" href={pokemonUrl}>
+            <button className="btn btn-danger">
               Ver Más
-            </a>
+            </button>
           </div>
         </div>
       </div>
