@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { nationalPokedex } from "../../constants";
+import { fetchAllPokemons } from "../../constants";
 import PokemonCard from "../pokemon-card/PokemonCard.component";
 import SearchBar from "../search-bar/SearchBar.component";
+import Spinner from '../spinner/spinner.component';
 import "./PokemonCardsContainer.styles.scss";
 
 const PokemonCardsContainer = () => {
@@ -9,45 +10,32 @@ const PokemonCardsContainer = () => {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  //Get pokemon names from PokeApi
+  //Get pokemons from PokeApi
   useEffect(() => {
-    fetch(nationalPokedex)
-      .then((response) => response.json())
+    fetchAllPokemons()
       .then((response) => {
         setPokemons(response.pokemon_entries);
       })
-      .catch((error) => console.log(error));
   }, []);
 
   // When the search input value updates, filter through the pokemons to match the search value
-  useEffect(() => {
+  useEffect(() => {  
     const results = pokemons.filter(pokemon => {
       return pokemon.pokemon_species.name.includes(search)
     }) 
     setSearchResults(results);
   }, [search])
 
-
-  const handleChange = (e) => {
+  const handlechange = (e) => {
     setSearch(e.target.value);
-  };
+  }
 
   return (
-    <div className="container">
-      <SearchBar search={search} handlechange={handleChange} />
+    <div className="container py-5">
+      <SearchBar search={search} handlechange={handlechange} />
       <div className="row">
         {pokemons.length === 0 ? (
-          <div className="sk-cube-grid">
-            <div className="sk-cube sk-cube1"></div>
-            <div className="sk-cube sk-cube2"></div>
-            <div className="sk-cube sk-cube3"></div>
-            <div className="sk-cube sk-cube4"></div>
-            <div className="sk-cube sk-cube5"></div>
-            <div className="sk-cube sk-cube6"></div>
-            <div className="sk-cube sk-cube7"></div>
-            <div className="sk-cube sk-cube8"></div>
-            <div className="sk-cube sk-cube9"></div>
-          </div>
+          <Spinner />
         ) : searchResults.length === 0 ? (
           pokemons.map((pokemon) => (
             <PokemonCard
